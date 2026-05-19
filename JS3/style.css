@@ -1,0 +1,242 @@
+/* =============================================
+   Reset e Base
+   ============================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff8f0;
+  color: #333;
+}
+
+/* =============================================
+   Header
+   ============================================= */
+header {
+  background-color: #c0392b;
+  color: white;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+}
+
+header p {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* =============================================
+   Layout Principal
+   ============================================= */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 32px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* =============================================
+   Seção Cardápio
+   ============================================= */
+.menu {
+  flex: 1 1 55%;
+}
+
+.menu h2 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: #c0392b;
+  border-bottom: 2px solid #c0392b;
+  padding-bottom: 6px;
+}
+
+.pizza-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.pizza-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.pizza-card:hover {
+  transform: translateY(-4px);
+}
+
+.pizza-card .emoji {
+  font-size: 3rem;
+}
+
+.pizza-card h3 {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.pizza-card .price {
+  font-weight: bold;
+  color: #c0392b;
+  font-size: 1.1rem;
+}
+
+.btn-add {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #a93226;
+}
+
+/* =============================================
+   Seção Carrinho
+   ============================================= */
+.cart {
+  flex: 1 1 35%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  align-self: flex-start;
+  position: sticky;
+  top: 24px;
+}
+
+.cart h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #c0392b;
+  border-bottom: 2px solid #c0392b;
+  padding-bottom: 6px;
+}
+
+/* Aviso de persistência */
+.persist-info {
+  font-size: 0.8rem;
+  color: #27ae60;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+#cartList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border-left: 4px solid #c0392b;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart-item-info span {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cart-item-info small {
+  color: #888;
+  font-size: 0.82rem;
+}
+
+.btn-remove {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-remove:hover {
+  background-color: #c0392b;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+/* Rodapé do carrinho */
+.cart-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+#cartTotal {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 8px;
+}
+
+#clearBtn {
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+#clearBtn:hover {
+  background-color: #636e72;
+}
+
+/* Classe utilitária para esconder elementos */
+.hidden {
+  display: none !important;
+}

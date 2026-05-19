@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pizzaria FATEC</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🍕 Pizzaria FATEC</h1>
+    <p>Cardápio & Carrinho de Compras</p>
+  </header>
+
+  <main>
+    <!-- Seção do Cardápio -->
+    <section class="menu">
+      <h2>Cardápio</h2>
+      <div class="pizza-grid" id="pizzaGrid">
+        <!-- Cards inseridos via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Seção do Carrinho -->
+    <section class="cart">
+      <h2>🛒 Carrinho</h2>
+
+      <!-- Aviso de persistência -->
+      <p class="persist-info">💾 Seu carrinho é salvo automaticamente!</p>
+
+      <!-- Lista de itens do carrinho -->
+      <ul id="cartList"></ul>
+
+      <!-- Mensagem exibida quando o carrinho está vazio -->
+      <p id="emptyMsg" class="empty-msg">Seu carrinho está vazio.</p>
+
+      <!-- Rodapé: total e botões -->
+      <div class="cart-footer hidden" id="cartFooter">
+        <span id="cartTotal">Total: R$ 0,00</span>
+        <div class="cart-actions">
+          <button id="clearBtn" onclick="limparCarrinho()">Limpar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pizzaria FATEC</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🍕 Pizzaria FATEC</h1>
+    <p>Cardápio & Carrinho de Compras</p>
+  </header>
+
+  <main>
+    <!-- Seção do Cardápio -->
+    <section class="menu">
+      <h2>Cardápio</h2>
+      <div class="pizza-grid" id="pizzaGrid">
+        <!-- Cards de pizza inseridos via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Seção do Carrinho -->
+    <section class="cart">
+      <h2>🛒 Carrinho</h2>
+
+      <!-- Lista de itens do carrinho -->
+      <ul id="cartList"></ul>
+
+      <!-- Mensagem exibida quando o carrinho está vazio -->
+      <p id="emptyMsg" class="empty-msg">Seu carrinho está vazio.</p>
+
+      <!-- Rodapé: total + botões de ação -->
+      <div class="cart-footer hidden" id="cartFooter">
+        <span id="cartTotal">Total: R$ 0,00</span>
+        <div class="cart-actions">
+          <button id="clearBtn" onclick="limparCarrinho()">Limpar</button>
+          <!-- Botão que abre o modal de resumo do pedido -->
+          <button id="finalizarBtn" onclick="abrirModal()">Finalizar Pedido ✅</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =============================================
+       MODAL – Resumo do Pedido
+       Oculto por padrão via classe .hidden no CSS
+       ============================================= -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal">
+
+      <h2>📋 Resumo do Pedido</h2>
+
+      <!-- Lista de pizzas do pedido (preenchida via JS) -->
+      <ul class="modal-list" id="modalList"></ul>
+
+      <!-- Linha de totais -->
+      <div class="modal-totals">
+        <span>Quantidade de itens: <strong id="modalQtd">0</strong></span>
+        <span>Total: <strong id="modalTotal">R$ 0,00</strong></span>
+      </div>
+
+      <!-- Botões do modal -->
+      <div class="modal-actions">
+        <!-- Fecha o modal sem confirmar -->
+        <button class="btn-fechar" onclick="fecharModal()">Fechar Modal ✕</button>
+        <!-- Confirma o pedido -->
+        <button class="btn-confirmar" onclick="confirmarPedido()">Confirmar Pedido 🍕</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
