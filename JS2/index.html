@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pizzaria FATEC</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>" />
+  <style>
+    /* =============================================
+       Reset e Base
+       ============================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff8f0;
+      color: #333;
+    }
+
+    /* =============================================
+       Header
+       ============================================= */
+    header {
+      background-color: #c0392b;
+      color: white;
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    /* =============================================
+       Layout Principal
+       ============================================= */
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 32px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* =============================================
+       Seção Cardápio
+       ============================================= */
+    .menu {
+      flex: 1 1 55%;
+    }
+
+    .menu h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+      border-bottom: 2px solid #c0392b;
+      padding-bottom: 6px;
+    }
+
+    .pizza-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .pizza-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s;
+    }
+
+    .pizza-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .pizza-card .emoji {
+      font-size: 3rem;
+    }
+
+    .pizza-card h3 {
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .pizza-card .price {
+      font-weight: bold;
+      color: #c0392b;
+      font-size: 1.1rem;
+    }
+
+    .btn-add {
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    .btn-add:hover {
+      background-color: #a93226;
+    }
+
+    /* =============================================
+       Seção Carrinho
+       ============================================= */
+    .cart {
+      flex: 1 1 35%;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      align-self: flex-start;
+      position: sticky;
+      top: 24px;
+    }
+
+    .cart h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+      border-bottom: 2px solid #c0392b;
+      padding-bottom: 6px;
+    }
+
+    #cartList {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border-left: 4px solid #c0392b;
+    }
+
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cart-item-info span {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .cart-item-info small {
+      color: #888;
+      font-size: 0.82rem;
+    }
+
+    .btn-remove {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-remove:hover {
+      background-color: #c0392b;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #aaa;
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+    /* Rodapé do carrinho */
+    .cart-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #cartTotal {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Agrupa os botões do rodapé */
+    .cart-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    #clearBtn {
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background-color 0.2s;
+    }
+
+    #clearBtn:hover {
+      background-color: #636e72;
+    }
+
+    /* Botão Finalizar Pedido */
+    #finalizarBtn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    #finalizarBtn:hover {
+      background-color: #1e8449;
+    }
+
+    /* Classe utilitária para esconder elementos */
+    .hidden {
+      display: none !important;
+    }
+
+    /* =============================================
+       MODAL – Overlay (fundo escurecido)
+       ============================================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* =============================================
+       MODAL – Caixa de conteúdo
+       ============================================= */
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal h2 {
+      font-size: 1.4rem;
+      color: #c0392b;
+      border-bottom: 2px solid #c0392b;
+      padding-bottom: 8px;
+    }
+
+    /* Lista de pizzas dentro do modal */
+    .modal-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .modal-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8f0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      border-left: 4px solid #c0392b;
+      font-size: 0.95rem;
+    }
+
+    .modal-list li span {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Linha com quantidade e total */
+    .modal-totals {
+      display: flex;
+      justify-content: space-between;
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+    }
+
+    .modal-totals strong {
+      color: #c0392b;
+    }
+
+    /* Botões do modal */
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-fechar {
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+    }
+
+    .btn-fechar:hover {
+      background-color: #636e72;
+    }
+
+    .btn-confirmar {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .btn-confirmar:hover {
+      background-color: #1e8449;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍕 Pizzaria FATEC</h1>
+    <p>Cardápio & Carrinho de Compras</p>
+  </header>
+
+  <main>
+    <!-- Seção do Cardápio -->
+    <section class="menu">
+      <h2>Cardápio</h2>
+      <div class="pizza-grid" id="pizzaGrid">
+        <!-- Cards de pizza inseridos via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Seção do Carrinho -->
+    <section class="cart">
+      <h2>🛒 Carrinho</h2>
+
+      <!-- Lista de itens do carrinho -->
+      <ul id="cartList"></ul>
+
+      <!-- Mensagem exibida quando o carrinho está vazio -->
+      <p id="emptyMsg" class="empty-msg">Seu carrinho está vazio.</p>
+
+      <!-- Rodapé: total + botões de ação -->
+      <div class="cart-footer hidden" id="cartFooter">
+        <span id="cartTotal">Total: R$ 0,00</span>
+        <div class="cart-actions">
+          <button id="clearBtn" onclick="limparCarrinho()">Limpar</button>
+          <!-- Botão que abre o modal de resumo do pedido -->
+          <button id="finalizarBtn" onclick="abrirModal()">Finalizar Pedido ✅</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =============================================
+       MODAL – Resumo do Pedido
+       Oculto por padrão via classe .hidden no CSS
+       ============================================= -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal">
+
+      <h2>📋 Resumo do Pedido</h2>
+
+      <!-- Lista de pizzas do pedido (preenchida via JS) -->
+      <ul class="modal-list" id="modalList"></ul>
+
+      <!-- Linha de totais -->
+      <div class="modal-totals">
+        <span>Quantidade de itens: <strong id="modalQtd">0</strong></span>
+        <span>Total: <strong id="modalTotal">R$ 0,00</strong></span>
+      </div>
+
+      <!-- Botões do modal -->
+      <div class="modal-actions">
+        <!-- Fecha o modal sem confirmar -->
+        <button class="btn-fechar" onclick="fecharModal()">Fechar Modal ✕</button>
+        <!-- Confirma o pedido -->
+        <button class="btn-confirmar" onclick="confirmarPedido()">Confirmar Pedido 🍕</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // =============================================
+    // Dados do Cardápio
+    // =============================================
+
+    const pizzas = [
+      { id: 1, nome: "Margherita",         preco: 35.00, emoji: "🍕" },
+      { id: 2, nome: "Calabresa",          preco: 38.00, emoji: "🌶️" },
+      { id: 3, nome: "Portuguesa",         preco: 40.00, emoji: "🍳" },
+      { id: 4, nome: "Frango c/ Catupiry", preco: 42.00, emoji: "🐔" },
+      { id: 5, nome: "4 Queijos",          preco: 45.00, emoji: "🧀" },
+      { id: 6, nome: "Pepperoni",          preco: 46.00, emoji: "🔴" },
+    ];
+
+    // =============================================
+    // Estado do Carrinho
+    // =============================================
+
+    let carrinho = [];
+    let proximoCartId = 1;
+
+    // =============================================
+    // Renderização do Cardápio
+    // =============================================
+
+    function renderizarCardapio() {
+      const grid = document.getElementById("pizzaGrid");
+
+      pizzas.forEach(pizza => {
+        const card = document.createElement("div");
+        card.classList.add("pizza-card");
+
+        card.innerHTML = `
+          <div class="emoji">${pizza.emoji}</div>
+          <h3>${pizza.nome}</h3>
+          <span class="price">R$ ${pizza.preco.toFixed(2)}</span>
+          <button class="btn-add" onclick="adicionarAoCarrinho(${pizza.id})">
+            Adicionar 🛒
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // =============================================
+    // Funções do Carrinho
+    // =============================================
+
+    function adicionarAoCarrinho(pizzaId) {
+      const pizza = pizzas.find(p => p.id === pizzaId);
+      if (!pizza) return;
+
+      const item = {
+        cartId: proximoCartId++,
+        id: pizza.id,
+        nome: pizza.nome,
+        preco: pizza.preco,
+        emoji: pizza.emoji,
+      };
+
+      carrinho.push(item);
+      renderizarCarrinho();
+    }
+
+    function removerDoCarrinho(cartId) {
+      carrinho = carrinho.filter(item => item.cartId !== cartId);
+      renderizarCarrinho();
+    }
+
+    function limparCarrinho() {
+      carrinho = [];
+      renderizarCarrinho();
+    }
+
+    // =============================================
+    // Renderização do Carrinho
+    // =============================================
+
+    function renderizarCarrinho() {
+      const lista      = document.getElementById("cartList");
+      const emptyMsg   = document.getElementById("emptyMsg");
+      const cartFooter = document.getElementById("cartFooter");
+      const cartTotal  = document.getElementById("cartTotal");
+
+      lista.innerHTML = "";
+
+      if (carrinho.length === 0) {
+        emptyMsg.style.display = "block";
+        cartFooter.classList.add("hidden");
+        return;
+      }
+
+      emptyMsg.style.display = "none";
+      cartFooter.classList.remove("hidden");
+
+      let total = 0;
+
+      carrinho.forEach(item => {
+        total += item.preco;
+
+        const li = document.createElement("li");
+        li.classList.add("cart-item");
+
+        li.innerHTML = `
+          <div class="cart-item-info">
+            <span>${item.emoji} ${item.nome}</span>
+            <small>R$ ${item.preco.toFixed(2)}</small>
+          </div>
+          <button class="btn-remove" onclick="removerDoCarrinho(${item.cartId})">
+            Remover ✕
+          </button>
+        `;
+
+        lista.appendChild(li);
+      });
+
+      cartTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+
+    // =============================================
+    // Funções do Modal
+    // =============================================
+
+    function abrirModal() {
+      if (carrinho.length === 0) return;
+
+      const overlay   = document.getElementById("modalOverlay");
+      const modalList = document.getElementById("modalList");
+      const modalQtd  = document.getElementById("modalQtd");
+      const modalTot  = document.getElementById("modalTotal");
+
+      modalList.innerHTML = "";
+
+      let total = 0;
+
+      carrinho.forEach(item => {
+        total += item.preco;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${item.emoji} ${item.nome}</span>
+          <span>R$ ${item.preco.toFixed(2)}</span>
+        `;
+        modalList.appendChild(li);
+      });
+
+      modalQtd.textContent = carrinho.length;
+      modalTot.textContent = `R$ ${total.toFixed(2)}`;
+
+      overlay.classList.remove("hidden");
+    }
+
+    function fecharModal() {
+      document.getElementById("modalOverlay").classList.add("hidden");
+    }
+
+    function confirmarPedido() {
+      alert("✅ Pedido confirmado! Obrigado pela preferência 🍕");
+      limparCarrinho();
+      fecharModal();
+    }
+
+    // =============================================
+    // Fechar modal clicando fora (no overlay)
+    // =============================================
+
+    document.getElementById("modalOverlay").addEventListener("click", function (e) {
+      if (e.target === this) {
+        fecharModal();
+      }
+    });
+
+    // =============================================
+    // Inicialização
+    // =============================================
+
+    renderizarCardapio();
+    renderizarCarrinho();
+  </script>
+</body>
+</html>
