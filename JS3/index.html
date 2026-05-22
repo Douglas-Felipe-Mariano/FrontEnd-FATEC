@@ -5,7 +5,250 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pizzaria FATEC</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* =============================================
+       Reset e Base
+       ============================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff8f0;
+      color: #333;
+    }
+
+    /* =============================================
+       Header
+       ============================================= */
+    header {
+      background-color: #c0392b;
+      color: white;
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    /* =============================================
+       Layout Principal
+       ============================================= */
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 32px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* =============================================
+       Seção Cardápio
+       ============================================= */
+    .menu {
+      flex: 1 1 55%;
+    }
+
+    .menu h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+      border-bottom: 2px solid #c0392b;
+      padding-bottom: 6px;
+    }
+
+    .pizza-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .pizza-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s;
+    }
+
+    .pizza-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .pizza-card .emoji {
+      font-size: 3rem;
+    }
+
+    .pizza-card h3 {
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .pizza-card .price {
+      font-weight: bold;
+      color: #c0392b;
+      font-size: 1.1rem;
+    }
+
+    .btn-add {
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    .btn-add:hover {
+      background-color: #a93226;
+    }
+
+    /* =============================================
+       Seção Carrinho
+       ============================================= */
+    .cart {
+      flex: 1 1 35%;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      align-self: flex-start;
+      position: sticky;
+      top: 24px;
+    }
+
+    .cart h2 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: #c0392b;
+      border-bottom: 2px solid #c0392b;
+      padding-bottom: 6px;
+    }
+
+    /* Aviso de persistência */
+    .persist-info {
+      font-size: 0.8rem;
+      color: #27ae60;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    #cartList {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border-left: 4px solid #c0392b;
+    }
+
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cart-item-info span {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .cart-item-info small {
+      color: #888;
+      font-size: 0.82rem;
+    }
+
+    .btn-remove {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-remove:hover {
+      background-color: #c0392b;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #aaa;
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+    /* Rodapé do carrinho */
+    .cart-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    #cartTotal {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    #clearBtn {
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background-color 0.2s;
+    }
+
+    #clearBtn:hover {
+      background-color: #636e72;
+    }
+
+    /* Classe utilitária para esconder elementos */
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -46,6 +289,161 @@
     </section>
   </main>
 
-  <script src="app.js"></script>
+  <script>
+    // =============================================
+    // Dados do Cardápio
+    // =============================================
+
+    const pizzas = [
+      { id: 1, nome: "Margherita",         preco: 35.00, emoji: "🍕" },
+      { id: 2, nome: "Calabresa",          preco: 38.00, emoji: "🌶️" },
+      { id: 3, nome: "Portuguesa",         preco: 40.00, emoji: "🍳" },
+      { id: 4, nome: "Frango c/ Catupiry", preco: 42.00, emoji: "🐔" },
+      { id: 5, nome: "4 Queijos",          preco: 45.00, emoji: "🧀" },
+      { id: 6, nome: "Pepperoni",          preco: 46.00, emoji: "🔴" },
+    ];
+
+    // =============================================
+    // Chave usada no localStorage
+    // =============================================
+
+    const STORAGE_KEY = "pizzaria_carrinho";
+
+    // =============================================
+    // Estado do Carrinho
+    // =============================================
+
+    let carrinho = carregarCarrinho();
+    let proximoCartId = calcularProximoId();
+
+    // =============================================
+    // Funções de Persistência (localStorage)
+    // =============================================
+
+    function salvarCarrinho() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(carrinho));
+    }
+
+    function carregarCarrinho() {
+      const dados = localStorage.getItem(STORAGE_KEY);
+      if (dados === null) return [];
+      return JSON.parse(dados);
+    }
+
+    function calcularProximoId() {
+      if (carrinho.length === 0) return 1;
+      const maiorId = Math.max(...carrinho.map(item => item.cartId));
+      return maiorId + 1;
+    }
+
+    // =============================================
+    // Renderização do Cardápio
+    // =============================================
+
+    function renderizarCardapio() {
+      const grid = document.getElementById("pizzaGrid");
+
+      pizzas.forEach(pizza => {
+        const card = document.createElement("div");
+        card.classList.add("pizza-card");
+
+        card.innerHTML = `
+          <div class="emoji">${pizza.emoji}</div>
+          <h3>${pizza.nome}</h3>
+          <span class="price">R$ ${pizza.preco.toFixed(2)}</span>
+          <button class="btn-add" onclick="adicionarAoCarrinho(${pizza.id})">
+            Adicionar 🛒
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // =============================================
+    // Funções do Carrinho
+    // =============================================
+
+    function adicionarAoCarrinho(pizzaId) {
+      const pizza = pizzas.find(p => p.id === pizzaId);
+      if (!pizza) return;
+
+      const item = {
+        cartId: proximoCartId++,
+        id: pizza.id,
+        nome: pizza.nome,
+        preco: pizza.preco,
+        emoji: pizza.emoji,
+      };
+
+      carrinho.push(item);
+      salvarCarrinho();
+      renderizarCarrinho();
+    }
+
+    function removerDoCarrinho(cartId) {
+      carrinho = carrinho.filter(item => item.cartId !== cartId);
+      salvarCarrinho();
+      renderizarCarrinho();
+    }
+
+    function limparCarrinho() {
+      carrinho = [];
+      localStorage.removeItem(STORAGE_KEY);
+      renderizarCarrinho();
+    }
+
+    // =============================================
+    // Renderização do Carrinho
+    // =============================================
+
+    function renderizarCarrinho() {
+      const lista      = document.getElementById("cartList");
+      const emptyMsg   = document.getElementById("emptyMsg");
+      const cartFooter = document.getElementById("cartFooter");
+      const cartTotal  = document.getElementById("cartTotal");
+
+      lista.innerHTML = "";
+
+      if (carrinho.length === 0) {
+        emptyMsg.style.display = "block";
+        cartFooter.classList.add("hidden");
+        return;
+      }
+
+      emptyMsg.style.display = "none";
+      cartFooter.classList.remove("hidden");
+
+      let total = 0;
+
+      carrinho.forEach(item => {
+        total += item.preco;
+
+        const li = document.createElement("li");
+        li.classList.add("cart-item");
+
+        li.innerHTML = `
+          <div class="cart-item-info">
+            <span>${item.emoji} ${item.nome}</span>
+            <small>R$ ${item.preco.toFixed(2)}</small>
+          </div>
+          <button class="btn-remove" onclick="removerDoCarrinho(${item.cartId})">
+            Remover ✕
+          </button>
+        `;
+
+        lista.appendChild(li);
+      });
+
+      cartTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+
+    // =============================================
+    // Inicialização
+    // =============================================
+
+    renderizarCardapio();
+    renderizarCarrinho();
+  </script>
 </body>
 </html>

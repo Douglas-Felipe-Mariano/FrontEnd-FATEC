@@ -5,7 +5,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pizzaria FATEC</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* =============================================
+       Reset e Base
+       ============================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff8f0;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* =============================================
+       Header
+       ============================================= */
+    header {
+      background-color: #c0392b;
+      color: white;
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    /* =============================================
+       Layout Principal
+       ============================================= */
+    main {
+      display: flex;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    /* =============================================
+       Seção do Formulário
+       ============================================= */
+    .form-section {
+      background: white;
+      border-radius: 16px;
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .form-section h2 {
+      font-size: 1.6rem;
+      color: #c0392b;
+      margin-bottom: 6px;
+    }
+
+    .form-subtitle {
+      color: #888;
+      font-size: 0.92rem;
+      margin-bottom: 28px;
+    }
+
+    /* =============================================
+       Grupos de campo
+       ============================================= */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #444;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Asterisco de campo obrigatório */
+    .obrigatorio {
+      color: #c0392b;
+    }
+
+    /* Contador de caracteres da mensagem */
+    .contador {
+      font-weight: 400;
+      color: #aaa;
+      font-size: 0.8rem;
+    }
+
+    /* =============================================
+       Inputs e Textarea
+       ============================================= */
+    input,
+    textarea {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      resize: vertical;
+      color: #333;
+      background: #fafafa;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+      background: white;
+    }
+
+    /* Estado de erro: borda vermelha */
+    input.invalido,
+    textarea.invalido {
+      border-color: #e74c3c;
+      background-color: #fff5f5;
+    }
+
+    /* Estado válido: borda verde */
+    input.valido,
+    textarea.valido {
+      border-color: #27ae60;
+      background-color: #f5fff8;
+    }
+
+    /* =============================================
+       Mensagens de Erro
+       ============================================= */
+    .erro {
+      font-size: 0.82rem;
+      color: #e74c3c;
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .erro:not(:empty)::before {
+      content: "⚠ ";
+    }
+
+    /* =============================================
+       Botão Enviar
+       ============================================= */
+    .btn-enviar {
+      width: 100%;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+
+    .btn-enviar:hover {
+      background-color: #a93226;
+    }
+
+    .btn-enviar:active {
+      transform: scale(0.98);
+    }
+
+    /* =============================================
+       Mensagem de Sucesso
+       ============================================= */
+    .sucesso {
+      background-color: #eafaf1;
+      border: 1px solid #27ae60;
+      color: #1e8449;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    /* Classe utilitária para esconder elementos */
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -77,6 +275,217 @@
     </section>
   </main>
 
-  <script src="app.js"></script>
+  <script>
+    // =============================================
+    // Regex de validação de e-mail
+    // =============================================
+
+    const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const MIN_CHARS_MENSAGEM = 10;
+
+    // =============================================
+    // Funções de Validação
+    // =============================================
+
+    function validarNome() {
+      const campo = document.getElementById("nome");
+      const erro  = document.getElementById("erro-nome");
+      const valor = campo.value.trim();
+
+      if (valor === "") {
+        exibirErro(campo, erro, "O nome é obrigatório.");
+        return false;
+      }
+
+      limparErro(campo, erro);
+      return true;
+    }
+
+    function validarEmail() {
+      const campo = document.getElementById("email");
+      const erro  = document.getElementById("erro-email");
+      const valor = campo.value.trim();
+
+      if (valor === "") {
+        exibirErro(campo, erro, "O e-mail é obrigatório.");
+        return false;
+      }
+
+      if (!REGEX_EMAIL.test(valor)) {
+        exibirErro(campo, erro, "Informe um e-mail válido (ex: nome@email.com).");
+        return false;
+      }
+
+      limparErro(campo, erro);
+      return true;
+    }
+
+    function validarMensagem() {
+      const campo = document.getElementById("mensagem");
+      const erro  = document.getElementById("erro-mensagem");
+      const valor = campo.value.trim();
+
+      if (valor === "") {
+        exibirErro(campo, erro, "A mensagem é obrigatória.");
+        return false;
+      }
+
+      if (valor.length < MIN_CHARS_MENSAGEM) {
+        exibirErro(
+          campo,
+          erro,
+          `A mensagem deve ter pelo menos ${MIN_CHARS_MENSAGEM} caracteres. (atual: ${valor.length})`
+        );
+        return false;
+      }
+
+      limparErro(campo, erro);
+      return true;
+    }
+
+    // =============================================
+    // Funções Auxiliares de UI
+    // =============================================
+
+    function exibirErro(campo, erroEl, mensagem) {
+      campo.classList.add("invalido");
+      campo.classList.remove("valido");
+      erroEl.textContent = mensagem;
+    }
+
+    function limparErro(campo, erroEl) {
+      campo.classList.remove("invalido");
+      campo.classList.add("valido");
+      erroEl.textContent = "";
+    }
+
+    // =============================================
+    // Contador de Caracteres (Mensagem)
+    // =============================================
+
+    function atualizarContador() {
+      const campo    = document.getElementById("mensagem");
+      const contador = document.getElementById("contadorMsg");
+      const qtd      = campo.value.trim().length;
+
+      contador.textContent = `${qtd} / mín. ${MIN_CHARS_MENSAGEM} caracteres`;
+      contador.style.color = qtd >= MIN_CHARS_MENSAGEM ? "#27ae60" : "#aaa";
+    }
+
+    // =============================================
+    // Validação em tempo real (ao sair do campo)
+    // =============================================
+
+    document.getElementById("nome").addEventListener("blur", validarNome);
+    document.getElementById("email").addEventListener("blur", validarEmail);
+    document.getElementById("mensagem").addEventListener("blur", validarMensagem);
+
+    // =============================================
+    // Envio do Formulário
+    // =============================================
+
+    function enviarFormulario(event) {
+      event.preventDefault();
+
+      const nomeValido     = validarNome();
+      const emailValido    = validarEmail();
+      const mensagemValida = validarMensagem();
+
+      if (!nomeValido || !emailValido || !mensagemValida) {
+        if (!nomeValido)          document.getElementById("nome").focus();
+        else if (!emailValido)    document.getElementById("email").focus();
+        else                      document.getElementById("mensagem").focus();
+        return;
+      }
+
+      const msgSucesso = document.getElementById("msgSucesso");
+      msgSucesso.classList.remove("hidden");
+
+      document.getElementById("contatoForm").reset();
+
+      ["nome", "email", "mensagem"].forEach(id => {
+        document.getElementById(id).classList.remove("valido", "invalido");
+      });
+
+      document.getElementById("contadorMsg").textContent =
+        `0 / mín. ${MIN_CHARS_MENSAGEM} caracteres`;
+      document.getElementById("contadorMsg").style.color = "#aaa";
+
+      setTimeout(() => msgSucesso.classList.add("hidden"), 5000);
+    }
+  </script>
+</body>
+</html>
+<body>
+
+  <header>
+    <h1>🍕 Pizzaria FATEC</h1>
+    <p>Entre em contato conosco</p>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>📬 Formulário de Contato</h2>
+      <p class="form-subtitle">Dúvidas, sugestões ou elogios? Fale com a gente!</p>
+
+      <form id="contatoForm" onsubmit="enviarFormulario(event)" novalidate>
+
+        <!-- Campo Nome -->
+        <div class="form-group" id="group-nome">
+          <label for="nome">Nome completo <span class="obrigatorio">*</span></label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Ex: João da Silva"
+            autocomplete="name"
+          />
+          <!-- Mensagem de erro exibida via JavaScript -->
+          <span class="erro" id="erro-nome"></span>
+        </div>
+
+        <!-- Campo E-mail -->
+        <div class="form-group" id="group-email">
+          <label for="email">E-mail <span class="obrigatorio">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Ex: joao@email.com"
+            autocomplete="email"
+          />
+          <span class="erro" id="erro-email"></span>
+        </div>
+
+        <!-- Campo Mensagem -->
+        <div class="form-group" id="group-mensagem">
+          <label for="mensagem">
+            Mensagem <span class="obrigatorio">*</span>
+            <!-- Contador de caracteres atualizado via JS -->
+            <small id="contadorMsg" class="contador">0 / mín. 10 caracteres</small>
+          </label>
+          <textarea
+            id="mensagem"
+            name="mensagem"
+            rows="5"
+            placeholder="Escreva sua mensagem aqui..."
+            oninput="atualizarContador()"
+          ></textarea>
+          <span class="erro" id="erro-mensagem"></span>
+        </div>
+
+        <!-- Botão de envio -->
+        <button type="submit" class="btn-enviar">Enviar Mensagem 📨</button>
+
+        <!-- Mensagem de sucesso exibida após envio válido -->
+        <div class="sucesso hidden" id="msgSucesso">
+          ✅ Mensagem enviada com sucesso! Entraremos em contato em breve.
+        </div>
+
+      </form>
+    </section>
+  </main>
+
+  <script>
 </body>
 </html>
